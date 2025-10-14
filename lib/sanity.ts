@@ -1,7 +1,6 @@
 import { createClient } from '@sanity/client';
 import createImageUrlBuilder from '@sanity/image-url';
 
-
 const projectId = '5cfj6cgg'; 
 const dataset = 'production';
 const apiVersion = '2025-01-01';
@@ -13,12 +12,11 @@ export const client = createClient({
   useCdn: true, 
 });
 
-export const urlFor = (source: any) => 
+export const urlFor = (source: { _type: string; asset: { _ref: string } }) => 
   createImageUrlBuilder({ 
     projectId,
     dataset
   }).image(source);
-
 
 export const testConnection = async () => {
   try {
