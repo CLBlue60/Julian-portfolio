@@ -17,6 +17,7 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     async function fetchPhotos() {
@@ -37,6 +38,14 @@ export default function Gallery() {
     ? photos 
     : photos.filter(photo => photo.category === activeCategory);
 
+  const nextPhoto = () => {
+    setCurrentIndex((prev) => (prev === filteredPhotos.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevPhoto = () => {
+    setCurrentIndex((prev) => (prev === 0 ? filteredPhotos.length - 1 : prev - 1));
+  };
+
   if (loading) {
     return (
       <section id="gallery" className="min-h-screen py-20 bg-sand">
@@ -50,151 +59,199 @@ export default function Gallery() {
   }
 
   return (
-    <section id="gallery" className="min-h-screen py-20 bg-sand">
-      <div className="container mx-auto px-4 max-w-7xl">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <div className="glass-card-white-premium rounded-3xl p-12 mb-8">
-            <h2 className="text-5xl font-russo mb-6 text-black">Gallery</h2>
-            <p className="text-xl font-urbanist text-gray-700 max-w-2xl mx-auto leading-relaxed">
-              A curated collection of moments captured through the lens
-            </p>
-          </div>
-        </motion.div>
+    <section id="gallery" className="min-h-screen bg-sand overflow-hidden">
+      {/* Header - Fixed at top */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-center pt-20 pb-16"
+      >
+        <div className="glass-card-white-premium rounded-3xl p-12 mb-8 mx-4 max-w-7xl mx-auto">
+          <h2 className="text-5xl font-russo mb-6 text-black">Gallery</h2>
+          <p className="text-xl font-urbanist text-gray-700 max-w-2xl mx-auto leading-relaxed">
+            A curated collection of moments captured through the lens
+          </p>
+        </div>
+      </motion.div>
 
-        {/* Category Filters */}
-        <motion.div 
-          className="flex flex-wrap justify-center gap-4 mb-16"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`glass-card-white glass-card-hover px-8 py-3 rounded-full font-urbanist font-medium transition-all duration-300 ${
-                activeCategory === category
-                  ? 'bg-sky/80 text-white border-2 border-white/60'
-                  : 'bg-white/80 text-gray-700 border-2 border-white/50 hover:bg-white hover:border-white/70'
-              }`}
-            >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
-          ))}
-        </motion.div>
+      {/* Category Filters */}
+      <motion.div 
+        className="flex flex-wrap justify-center gap-4 mb-16 px-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => {
+              setActiveCategory(category);
+              setCurrentIndex(0);
+            }}
+            className={`glass-card-white glass-card-hover px-8 py-3 rounded-full font-urbanist font-medium transition-all duration-300 ${
+              activeCategory === category
+                ? 'bg-sky/80 text-white border-2 border-white/60'
+                : 'bg-white/80 text-gray-700 border-2 border-white/50 hover:bg-white hover:border-white/70'
+            }`}
+          >
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </button>
+        ))}
+      </motion.div>
 
-        {/* MASONRY GRID */}
-        <motion.div
-          className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          {filteredPhotos.map((photo, index) => (
-            <motion.div
-              key={photo._id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="break-inside-avoid group cursor-pointer"
-              onClick={() => setSelectedImage(index)}
-            >
-              <div className="glass-card-white glass-card-hover rounded-3xl overflow-hidden p-6">
-                {/* IMAGE CONTAINER WITH WHITE GLASS FRAME */}
-                <div className="glass-card-white rounded-2xl overflow-hidden mb-4 p-4 border-2 border-white/50">
-                  <img
-                    src={urlFor(photo.image).width(400).url()}
-                    alt={photo.title}
-                    className="w-full h-auto rounded-xl transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                </div>
+      {/* FULL-WIDTH INTERACTIVE CAROUSEL */}
+      <div className="relative h-screen-80">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={filteredPhotos[currentIndex]?._id}
+            initial={{ opacity: 0, x: 300 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -300 }}
+            transition={{ duration: 0.7, ease: "easeInOut" }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            {filteredPhotos[currentIndex] && (
+              <div 
+                className="w-full h-full flex items-center justify-center cursor-pointer bg-black/5"
+                onClick={() => setSelectedImage(currentIndex)}
+              >
+                <img
+                  src={urlFor(filteredPhotos[currentIndex].image).url()}
+                  alt={filteredPhotos[currentIndex].title}
+                  className="max-w-full max-h-full object-contain"
+                />
                 
-                {/* CONTENT */}
-                <div className="p-2">
-                  <h3 className="font-russo text-xl mb-3 text-black group-hover:text-sky transition-colors duration-300">
-                    {photo.title}
+                {/* TRANSPARENT TITLE BAR AT TOP */}
+                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-black/30 backdrop-blur-md rounded-2xl p-4 min-w-[300px] text-center border border-white/20">
+                  <h3 className="font-russo text-2xl text-white mb-1">
+                    {filteredPhotos[currentIndex].title}
                   </h3>
-                  {photo.category && (
-                    <span className="glass-card-white inline-block bg-white/80 border border-white/60 text-gray-800 px-4 py-2 rounded-full text-sm font-urbanist font-medium">
-                      {photo.category}
+                  {filteredPhotos[currentIndex].category && (
+                    <span className="inline-block bg-white/30 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-urbanist font-medium border border-white/40">
+                      {filteredPhotos[currentIndex].category}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Navigation Arrows */}
+        {filteredPhotos.length > 1 && (
+          <>
+            <button
+              onClick={prevPhoto}
+              className="glass-card-white absolute left-8 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full flex items-center justify-center text-3xl hover:scale-110 transition-transform duration-300 shadow-2xl z-20"
+            >
+              ‹
+            </button>
+            <button
+              onClick={nextPhoto}
+              className="glass-card-white absolute right-8 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full flex items-center justify-center text-3xl hover:scale-110 transition-transform duration-300 shadow-2xl z-20"
+            >
+              ›
+            </button>
+          </>
+        )}
+
+        {/* Photo Counter */}
+        {filteredPhotos.length > 1 && (
+          <div className="absolute bottom-8 right-8 glass-card-white rounded-2xl px-6 py-3">
+            <span className="font-urbanist text-lg text-gray-700">
+              {currentIndex + 1} / {filteredPhotos.length}
+            </span>
+          </div>
+        )}
+
+        {/* Thumbnail Preview Strip */}
+        {filteredPhotos.length > 1 && (
+          <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 flex gap-3">
+            {filteredPhotos.map((photo, index) => (
+              <motion.div
+                key={photo._id}
+                whileHover={{ scale: 1.1 }}
+                className={`w-12 h-12 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
+                  index === currentIndex ? 'border-sky scale-110' : 'border-white/50'
+                }`}
+                onClick={() => setCurrentIndex(index)}
+              >
+                <img
+                  src={urlFor(photo.image).width(80).height(80).url()}
+                  alt={photo.title}
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex items-center justify-center p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="relative max-w-6xl max-h-full flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="glass-card-white absolute -top-16 right-0 w-12 h-12 rounded-full flex items-center justify-center text-white text-2xl z-10 hover:text-sky transition-colors duration-300 hover:scale-110 border border-white/40"
+              >
+                ×
+              </button>
+              
+              <div className="glass-card-white-premium rounded-3xl p-8 max-w-4xl">
+                <img
+                  src={urlFor(filteredPhotos[selectedImage]?.image).url()}
+                  alt={filteredPhotos[selectedImage]?.title}
+                  className="max-w-full max-h-[70vh] object-contain rounded-2xl"
+                />
+                
+                {/* Transparent title bar for lightbox too */}
+                <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 mt-6 border border-white/30">
+                  <h3 className="font-russo text-2xl mb-2 text-white">{filteredPhotos[selectedImage]?.title}</h3>
+                  {filteredPhotos[selectedImage]?.category && (
+                    <span className="glass-card inline-block bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-urbanist font-medium border border-white/40">
+                      {filteredPhotos[selectedImage]?.category}
                     </span>
                   )}
                 </div>
               </div>
             </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Lightbox Modal with White Glass Effect */}
-        <AnimatePresence>
-          {selectedImage !== null && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 flex items-center justify-center p-4"
-              onClick={() => setSelectedImage(null)}
-            >
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                className="relative max-w-6xl max-h-full"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  onClick={() => setSelectedImage(null)}
-                  className="glass-card-white absolute top-4 right-4 w-12 h-12 rounded-full flex items-center justify-center text-gray-800 text-2xl z-10 hover:text-sky transition-colors duration-300 hover:scale-110"
-                >
-                  ×
-                </button>
-                
-                <div className="glass-card-white-premium rounded-3xl p-8">
-                  <img
-                    src={urlFor(photos[selectedImage].image).url()}
-                    alt={photos[selectedImage].title}
-                    className="max-w-full max-h-[80vh] object-contain rounded-2xl"
-                  />
-                  
-                  <div className="glass-card-white rounded-2xl p-6 mt-6 border-2 border-white/50">
-                    <h3 className="font-russo text-2xl mb-2 text-gray-800">{photos[selectedImage].title}</h3>
-                    {photos[selectedImage].category && (
-                      <span className="glass-card-white inline-block bg-white/80 border border-white/60 text-gray-800 px-4 py-2 rounded-full text-sm font-urbanist font-medium">
-                        {photos[selectedImage].category}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Empty State with White Glass Effect */}
-        {filteredPhotos.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
-            <div className="glass-card-white-premium rounded-3xl p-16 max-w-2xl mx-auto">
-              <div className="glass-card-white w-24 h-24 rounded-2xl flex items-center justify-center text-4xl mb-6 mx-auto">
-                📷
-              </div>
-              <h3 className="font-russo text-3xl mb-4 text-black">No photos found</h3>
-              <p className="font-urbanist text-xl text-gray-700">
-                Add some photos in Sanity Studio to see them here!
-              </p>
-            </div>
           </motion.div>
         )}
-      </div>
+      </AnimatePresence>
+
+      {/* Empty State */}
+      {filteredPhotos.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-16"
+        >
+          <div className="glass-card-white-premium rounded-3xl p-16 max-w-2xl mx-auto">
+            <div className="glass-card-white w-24 h-24 rounded-2xl flex items-center justify-center text-4xl mb-6 mx-auto">
+              📷
+            </div>
+            <h3 className="font-russo text-3xl mb-4 text-black">No photos found</h3>
+            <p className="font-urbanist text-xl text-gray-700">
+              Add some photos in Sanity Studio to see them here!
+            </p>
+          </div>
+        </motion.div>
+      )}
     </section>
   );
 }

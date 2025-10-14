@@ -19,8 +19,7 @@ export default function RootLayout({
             <div className="flex items-center py-4 w-full">
               {/* Left: Logo */}
               <div className="flex-1 flex flex-col items-start">
-                <h1 className="text-2xl font-russo text-black">Julian's Portfolio</h1>
-                <p className="text-sm font-urbanist text-sky font-medium">Photography</p>
+                <h1 className="text-2xl font-russo text-black">JL Media</h1>
               </div>
 
               <div className="flex flex-none gap-8 md:gap-14 items-center justify-center">
