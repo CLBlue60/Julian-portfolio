@@ -23,7 +23,7 @@ export default function HeaderSection() {
       <div className="glass-card-premium relative z-10 text-center max-w-5xl mx-auto p-12 mb-16">
         <div className="glass-card rounded-3xl p-8 border-2 border-white/40">
           <h1 className="text-4xl font-russo text-gray-900 sm:text-5xl lg:text-6xl mb-8 leading-tight tracking-tight">
-            Capture Life's
+            Capture Life&apos;s
             <span className="block bg-gradient-to-r from-sky to-sand bg-clip-text text-transparent mt-4">
               Moments
             </span>
@@ -64,8 +64,8 @@ export default function HeaderSection() {
           <div className="grid lg:grid-cols-2 gap-16 items-center relative z-10">
             {/* Left Column - Story */}
             <div className="space-y-8">
-              <div className="flex items-center justify-center gap-6 mb-8"> {/* Added justify-center */}
-                <div className="text-center"> {/* Added text-center wrapper */}
+              <div className="flex items-center justify-center gap-6 mb-8">
+                <div className="text-center">
                   <h3 className="text-5xl font-russo text-gray-900 mb-2">My Journey</h3>
                   <div className="h-1.5 bg-gradient-to-r from-sky to-sand rounded-full"></div>
                 </div>
@@ -74,13 +74,13 @@ export default function HeaderSection() {
               <div className="space-y-6">
                 <div className="glass-card glass-card-hover rounded-2xl p-8">
                   <p className="text-xl font-urbanist leading-relaxed text-gray-800 font-light">
-                    After six years in photography, I've learned that the equipment matters less than the eye behind the camera. It's about seeing what others miss.
+                    After six years in photography, I&apos;ve learned that the equipment matters less than the eye behind the camera. It&apos;s about seeing what others miss.
                   </p>
                 </div>
 
                 <div className="glass-card glass-card-hover rounded-2xl p-8">
                   <p className="text-xl font-urbanist leading-relaxed text-gray-800 font-light">
-                    Good photography isn't just about getting the technical stuff right. It's about capturing the <strong className="font-semibold text-sky">feeling</strong> in the room, the <strong className="font-semibold text-sky">connection</strong> between people, and the <strong className="font-semibold text-sky">truth</strong> of the moment.
+                    Good photography isn&apos;t just about getting the technical stuff right. It&apos;s about capturing the <strong className="font-semibold text-sky">feeling</strong> in the room, the <strong className="font-semibold text-sky">connection</strong> between people, and the <strong className="font-semibold text-sky">truth</strong> of the moment.
                   </p>
                 </div>
               </div>
@@ -92,7 +92,6 @@ export default function HeaderSection() {
               <div className="group">
                 <div className="glass-card glass-card-hover rounded-2xl p-10 bg-sky/30 border-2 border-sky/40">
                   <div className="flex items-center gap-4 mb-6">
-
                     <h4 className="font-russo text-3xl text-gray-900">Specialties</h4>
                   </div>
                   <ul className="space-y-4 text-xl font-urbanist text-gray-800">
@@ -124,7 +123,7 @@ export default function HeaderSection() {
                   </div>
                   <div className="glass-card rounded-xl p-6 border-2 border-white/30">
                     <p className="text-gray-800 text-xl font-urbanist italic text-center font-light leading-relaxed">
-                      "If a photo doesn't make you feel something, I haven't done my job. That's what keeps me picking up the camera."
+                      &quot;If a photo doesn&apos;t make you feel something, I haven&apos;t done my job. That&apos;s what keeps me picking up the camera.&quot;
                     </p>
                   </div>
                 </div>

@@ -8,7 +8,12 @@ import { urlFor } from '@/lib/sanity';
 interface Photo {
   _id: string;
   title: string;
-  image: any;
+  image: {
+    _type: string;
+    asset: {
+      _ref: string;
+    };
+  };
   category?: string;
 }
 
