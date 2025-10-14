@@ -6,13 +6,18 @@ import { urlFor } from '@/lib/sanity';
 
 interface BackgroundPhoto {
   _id: string;
-  image: any;
+  image: {
+    _type: string;
+    asset: {
+      _ref: string;
+    };
+  };
   title: string;
 }
 
 export default function ContactHero() {
   const [backgroundPhoto, setBackgroundPhoto] = useState<BackgroundPhoto | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchBackgroundPhoto() {
@@ -24,7 +29,7 @@ export default function ContactHero() {
       } catch (error) {
         console.error('Error fetching background photo:', error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
     fetchBackgroundPhoto();
@@ -52,7 +57,7 @@ export default function ContactHero() {
   };
 
   return (
-    <section id="contact" className="min-h-[70vh] flex items-center justify-center relative bg-cover bg-center">
+    <section id="contact" className="min-h-[70vh] flex items-center justify-center relative bg-cover bg-center py-20">
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -62,15 +67,17 @@ export default function ContactHero() {
         }}
       ></div>
       
-      {/* Overlay */}
       <div className="absolute inset-0 bg-black/40"></div>
       
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-sky/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-sand/30 rounded-full blur-2xl"></div>
+      
       <div className="container mx-auto px-4 max-w-4xl relative z-10">
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border-2 border-sky">
+        <div className="glass-card-white-premium rounded-3xl p-12 border-2 border-white/40">
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold mb-4 text-black">Get In Touch</h2>
-            <p className="text-lg text-gray-700">
-              Ready to create something beautiful? Let's discuss your project.
+            <h2 className="text-5xl font-russo mb-4 text-black">Get In Touch</h2>
+            <p className="text-xl font-urbanist text-gray-700">
+              Ready to create something beautiful? Let&apos;s discuss your project.
             </p>
           </div>
           
@@ -82,28 +89,22 @@ export default function ContactHero() {
           >
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-semibold mb-2 text-black">
-                  Name
-                </label>
                 <input
                   type="text"
                   id="name"
                   name="name"
-                  className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-sky focus:outline-none"
+                  className="w-full glass-card-white rounded-2xl px-6 py-4 border-2 border-white/50 focus:border-sky focus:outline-none transition-colors font-urbanist"
                   required
                   placeholder="Your name"
                 />
               </div>
               
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold mb-2 text-black">
-                  Email
-                </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-sky focus:outline-none"
+                  className="w-full glass-card-white rounded-2xl px-6 py-4 border-2 border-white/50 focus:border-sky focus:outline-none transition-colors font-urbanist"
                   required
                   placeholder="your@email.com"
                 />
@@ -111,14 +112,11 @@ export default function ContactHero() {
             </div>
             
             <div>
-              <label htmlFor="message" className="block text-sm font-semibold mb-2 text-black">
-                Message
-              </label>
               <textarea
                 id="message"
                 name="message"
                 rows={4}
-                className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-sky focus:outline-none resize-vertical"
+                className="w-full glass-card-white rounded-2xl px-6 py-4 border-2 border-white/50 focus:border-sky focus:outline-none transition-colors resize-vertical font-urbanist"
                 required
                 placeholder="Tell me about your project..."
               />
@@ -127,7 +125,7 @@ export default function ContactHero() {
             <div className="text-center">
               <button 
                 type="submit"
-                className="px-8 py-3 bg-sky text-black text-lg font-semibold rounded-lg hover:bg-sand transition-colors"
+                className="glass-card glass-card-hover px-12 py-4 bg-sky/30 border-2 border-sky/40 text-sky text-xl font-bold rounded-full hover:bg-sky/50 hover:text-white transition-all duration-300"
               >
                 Send Message
               </button>

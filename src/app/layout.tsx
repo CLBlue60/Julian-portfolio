@@ -56,8 +56,8 @@ export default function RootLayout({
 
         <footer className="bg-black text-white py-12">
           <div className="container mx-auto px-4 max-w-7xl text-center">
-            <p className="text-lg mb-4 text-sky">Let's create something beautiful</p>
-            <p className="text-gray-400">&copy; 2024 Julian's Portfolio</p>
+            <p className="text-lg mb-4 text-sky">Let&apos;s create something beautiful</p>
+            <p className="text-gray-400">&copy; 2024 Julian&apos;s Portfolio</p>
           </div>
         </footer>
       </body>
