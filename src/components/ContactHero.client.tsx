@@ -17,7 +17,6 @@ interface BackgroundPhoto {
 
 export default function ContactHero() {
   const [backgroundPhoto, setBackgroundPhoto] = useState<BackgroundPhoto | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchBackgroundPhoto() {
@@ -28,8 +27,6 @@ export default function ContactHero() {
         setBackgroundPhoto(data);
       } catch (error) {
         console.error('Error fetching background photo:', error);
-      } finally {
-        setIsLoading(false);
       }
     }
     fetchBackgroundPhoto();
@@ -51,13 +48,14 @@ export default function ContactHero() {
         alert('Thank you! Your message has been sent.');
         form.reset();
       }
-    } catch (error) {
+    } catch {
       alert('There was an error. Please try again.');
     }
   };
 
   return (
     <section id="contact" className="min-h-[70vh] flex items-center justify-center relative bg-cover bg-center py-20">
+      {/* Dynamic background from Sanity */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -67,8 +65,10 @@ export default function ContactHero() {
         }}
       ></div>
       
+      {/* Overlay */}
       <div className="absolute inset-0 bg-black/40"></div>
       
+      {/* Decorative elements matching your theme */}
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-sky/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-sand/30 rounded-full blur-2xl"></div>
       
