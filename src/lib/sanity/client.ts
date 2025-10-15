@@ -1,16 +1,30 @@
-import { createClient } from 'next-sanity';
-import imageUrlBuilder from '@sanity/image-url';
-import { apiVersion, dataset, projectId } from '../../../env';
+import { createClient } from '@sanity/client';
+import createImageUrlBuilder from '@sanity/image-url';
+
+const projectId = '5cfj6cgg'; 
+const dataset = 'production';
+const apiVersion = '2025-01-01';
 
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true,
+  useCdn: true, 
 });
 
-const builder = imageUrlBuilder({ projectId, dataset });
+export const urlFor = (source: { _type: string; asset: { _ref: string } }) => 
+  createImageUrlBuilder({ 
+    projectId,
+    dataset
+  }).image(source);
 
-export function urlFor(source: any) {
-  return builder.image(source);
-}
+export const testConnection = async () => {
+  try {
+    const data = await client.fetch('count(*)');
+    console.log('Sanity connection successful!', data);
+    return true;
+  } catch (error) {
+    console.error('Sanity connection failed:', error);
+    return false;
+  }
+};

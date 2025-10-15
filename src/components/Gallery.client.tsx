@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { client } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanity';
 
@@ -16,6 +17,8 @@ interface Photo {
   };
   category?: string;
 }
+
+const MotionImage = motion(Image);
 
 export default function Gallery() {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -39,8 +42,8 @@ export default function Gallery() {
   }, []);
 
   const categories = ['all', 'landscape', 'portrait', 'event', 'street'];
-  const filteredPhotos = activeCategory === 'all' 
-    ? photos 
+  const filteredPhotos = activeCategory === 'all'
+    ? photos
     : photos.filter(photo => photo.category === activeCategory);
 
   const nextPhoto = () => {
@@ -66,7 +69,7 @@ export default function Gallery() {
   return (
     <section id="gallery" className="min-h-screen bg-sand overflow-hidden">
       {/* Header - Fixed at top */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -81,7 +84,7 @@ export default function Gallery() {
       </motion.div>
 
       {/* Category Filters */}
-      <motion.div 
+      <motion.div
         className="flex flex-wrap justify-center gap-4 mb-16 px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -94,11 +97,10 @@ export default function Gallery() {
               setActiveCategory(category);
               setCurrentIndex(0);
             }}
-            className={`glass-card-white glass-card-hover px-8 py-3 rounded-full font-urbanist font-medium transition-all duration-300 ${
-              activeCategory === category
+            className={`glass-card-white glass-card-hover px-8 py-3 rounded-full font-urbanist font-medium transition-all duration-300 ${activeCategory === category
                 ? 'bg-sky/80 text-white border-2 border-white/60'
                 : 'bg-white/80 text-gray-700 border-2 border-white/50 hover:bg-white hover:border-white/70'
-            }`}
+              }`}
           >
             {category.charAt(0).toUpperCase() + category.slice(1)}
           </button>
@@ -117,16 +119,22 @@ export default function Gallery() {
             className="absolute inset-0 flex items-center justify-center"
           >
             {filteredPhotos[currentIndex] && (
-              <div 
+              <div
                 className="w-full h-full flex items-center justify-center cursor-pointer bg-black/5"
                 onClick={() => setSelectedImage(currentIndex)}
               >
-                <img
+                <MotionImage
                   src={urlFor(filteredPhotos[currentIndex].image).url()}
                   alt={filteredPhotos[currentIndex].title}
+                  width={1200}
+                  height={800}
                   className="max-w-full max-h-full object-contain"
+                  priority={currentIndex === 0}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
                 />
-                
+
                 {/* TRANSPARENT TITLE BAR AT TOP */}
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-black/30 backdrop-blur-md rounded-2xl p-4 min-w-[300px] text-center border border-white/20">
                   <h3 className="font-russo text-2xl text-white mb-1">
@@ -177,14 +185,15 @@ export default function Gallery() {
               <motion.div
                 key={photo._id}
                 whileHover={{ scale: 1.1 }}
-                className={`w-12 h-12 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
-                  index === currentIndex ? 'border-sky scale-110' : 'border-white/50'
-                }`}
+                className={`w-12 h-12 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${index === currentIndex ? 'border-sky scale-110' : 'border-white/50'
+                  }`}
                 onClick={() => setCurrentIndex(index)}
               >
-                <img
+                <Image
                   src={urlFor(photo.image).width(80).height(80).url()}
                   alt={photo.title}
+                  width={80}
+                  height={80}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -216,14 +225,20 @@ export default function Gallery() {
               >
                 ×
               </button>
-              
+
               <div className="glass-card-white-premium rounded-3xl p-8 max-w-4xl">
-                <img
+                <MotionImage
                   src={urlFor(filteredPhotos[selectedImage]?.image).url()}
                   alt={filteredPhotos[selectedImage]?.title}
+                  width={1600}
+                  height={1200}
                   className="max-w-full max-h-[70vh] object-contain rounded-2xl"
+                  priority
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
                 />
-                
+
                 {/* Transparent title bar for lightbox too */}
                 <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 mt-6 border border-white/30">
                   <h3 className="font-russo text-2xl mb-2 text-white">{filteredPhotos[selectedImage]?.title}</h3>
