@@ -11,7 +11,6 @@ export const client = createClient({
   apiVersion,
   useCdn: true, 
 });
-
 export const urlFor = (source: { _type: string; asset: { _ref: string } }) => 
   createImageUrlBuilder({ 
     projectId,
