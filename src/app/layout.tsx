@@ -1,7 +1,7 @@
 import './globals.css';
 
 export const metadata = {
-  title: "Julian's Portfolio",
+  title: "JL Media - Julian's Photography Portfolio",
   description: 'Photography portfolio showcase',
 };
 
