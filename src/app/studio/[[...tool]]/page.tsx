@@ -7,13 +7,34 @@
  * https://github.com/sanity-io/next-sanity
  */
 
-import { NextStudio } from 'next-sanity/studio'
-import config from '../../../../sanity.config'
-
-export const dynamic = 'force-static'
-
-export { metadata, viewport } from 'next-sanity/studio'
+import { useEffect, useRef } from 'react';
 
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  const mountRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!mountRef.current) return;
+    let disposed = false;
+
+    (async () => {
+      const [{ renderStudio }, configModule] = await Promise.all([
+        import('sanity'),
+        import('../../../../sanity.config'),
+      ]);
+
+      const studioConfig = configModule.default ?? configModule;
+      if (disposed) return;
+
+      renderStudio(mountRef.current!, studioConfig, {
+        reactStrictMode: false,
+        basePath: '/studio',
+      });
+    })();
+
+    return () => {
+      disposed = true;
+    };
+  }, []);
+
+  return <div id="sanity" ref={mountRef} style={{ minHeight: '100vh' }} />;
 }
