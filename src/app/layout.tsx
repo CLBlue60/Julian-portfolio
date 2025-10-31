@@ -5,13 +5,12 @@ export const metadata = {
   description: 'Photography portfolio showcase',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className="bg-sand text-black">
         {/* Header with centered links */}
         <header className="bg-white shadow-lg sticky top-0 z-50 border-b-4 border-sky">

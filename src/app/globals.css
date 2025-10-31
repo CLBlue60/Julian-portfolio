@@ -3,6 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* small global tweaks for better mobile rendering */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/* ensure container padding is consistent */
+.container {
+  max-width: 100%;
+}
+
+/* optional: reduce default heading sizes slightly on very small screens */
+@media (max-width: 375px) {
+  h1 { font-size: 1.6rem; }
+}
+
 @layer base {
   body {
     font-family: 'Urbanist', sans-serif;
