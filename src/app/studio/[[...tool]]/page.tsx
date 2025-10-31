@@ -7,6 +7,8 @@
  * https://github.com/sanity-io/next-sanity
  */
 
+'use client';
+
 import { useEffect, useRef } from 'react';
 
 export default function StudioPage() {

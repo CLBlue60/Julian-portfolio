@@ -18,7 +18,7 @@ interface Photo {
   category?: string;
 }
 
-const MotionImage = motion(Image);
+const MotionImage = motion.create(Image);
 
 export default function Gallery() {
   const [photos, setPhotos] = useState<Photo[]>([]);
