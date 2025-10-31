@@ -120,7 +120,7 @@ export default function Gallery() {
           >
             {filteredPhotos[currentIndex] && (
               <div
-                className="w-full h-full flex items-center justify-center cursor-pointer bg-black/5"
+                className="w-full h-full flex items-center justify-center cursor-pointer bg-transparent"
                 onClick={() => setSelectedImage(currentIndex)}
               >
                 <MotionImage
@@ -136,12 +136,12 @@ export default function Gallery() {
                 />
 
                 {/* TRANSPARENT TITLE BAR AT TOP */}
-                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-black/30 backdrop-blur-md rounded-2xl p-4 min-w-[300px] text-center border border-white/20">
-                  <h3 className="font-russo text-2xl text-white mb-1">
+                <div className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-md rounded-2xl p-4 min-w-[300px] text-center border border-white/20">
+                  <h3 className="font-russo text-2xl text-black mb-1">
                     {filteredPhotos[currentIndex].title}
                   </h3>
                   {filteredPhotos[currentIndex].category && (
-                    <span className="inline-block bg-white/30 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-urbanist font-medium border border-white/40">
+                    <span className="inline-block bg-white/30 backdrop-blur-sm text-black px-3 py-1 rounded-full text-sm font-urbanist font-medium border border-white/40">
                       {filteredPhotos[currentIndex].category}
                     </span>
                   )}

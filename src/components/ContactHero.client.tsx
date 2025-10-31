@@ -22,7 +22,7 @@ export default function ContactHero() {
     async function fetchBackgroundPhoto() {
       try {
         const data = await client.fetch(`
-          *[_type == "photo"] | order(_createdAt desc)[0]
+          *[_type == "photo"] | order(_createdAt desc)[7]
         `);
         setBackgroundPhoto(data);
       } catch (error) {
