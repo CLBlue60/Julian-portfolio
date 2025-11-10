@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JL Media — Julian's Photography Portfolio
 
-## Getting Started
+A Next.js + Sanity photography portfolio with a responsive gallery, lightbox (Framer Motion), contact section, and an optional embedded Sanity Studio.
 
-First, run the development server:
+## Features
+- Dynamic gallery powered by Sanity
+- Lightbox / animated gallery (framer-motion)
+- Glassmorphism UI with Tailwind CSS
+- Optional embedded Sanity Studio at `/studio`
+- Mobile-responsive layout and components
 
+## Quick start
+
+1. Install dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run development server
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Build for production
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment variables
 
-## Learn More
+Set these in `.env.local` (or in your deployment platform):
 
-To learn more about Next.js, take a look at the following resources:
+- NEXT_PUBLIC_SANITY_PROJECT_ID — your Sanity project ID (example: `5cfj6cgg`)
+- NEXT_PUBLIC_SANITY_DATASET — dataset name (example: `production`)
+- NEXT_PUBLIC_SANITY_API_VERSION — optional API version (e.g. `2025-01-01`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If these are not set, defaults in the code may be used. Ensure values match your Sanity project.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Sanity
 
-## Deploy on Vercel
+- Sanity Studio config: `sanity.config.ts`
+- Sanity document schema includes a `photo` document type.
+- Add your deployed domain to Sanity CORS origins (Project → API → CORS origins) to allow client requests from production.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Important files
+- App entry & layout: `src/app/page.tsx`, `src/app/layout.tsx`
+- Global styles: `src/app/globals.css`
+- Gallery: `src/components/Gallery.client.tsx`
+- Header / About: `src/components/HeaderSection.client.tsx`
+- Contact hero: `src/components/ContactHero.client.tsx`
+- Sanity client & helpers: `src/lib/sanity.ts` (or similar)
+- Next config (images): `next.config.ts`
+- Package scripts: `package.json`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment notes
+- Configure environment variables in your host (Vercel, Netlify, etc.).
+- Ensure `cdn.sanity.io` is allowed in `next.config.ts` remotePatterns for Next/Image optimization.
+- If embedding Sanity Studio under Next, prefer a client-only mount to avoid SSR bundling issues. Alternatively, run Studio separately with `sanity start`.
+
+## Troubleshooting
+
+- Images not loading in production:
+  - Confirm Sanity project ID / dataset env vars.
+  - Add your production domain to Sanity CORS origins.
+  - Check `next.config.ts` remotePatterns include `cdn.sanity.io`.
+
+- Sanity Studio build errors like `createContext is not a function`:
+  - Avoid importing Studio server-side; mount it client-side with dynamic import or run Studio separately.
+
+- Framer Motion deprecation:
+  - Replace `motion(Component)` with `motion.create(Component)` where applicable.
+
+## Contributing
+Open issues or pull requests for fixes and improvements.
